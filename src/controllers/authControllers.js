@@ -27,9 +27,19 @@ const register = async (req, res) => {
 		const userSaved = await newUser.save();
 
 		const payload = {
-			firstName: userSaved.firstName,
 			id: userSaved._id,
+			firstName: userSaved.firstName,
+			lastName: userSaved.lastName,
+			email: userSaved.email,
+			rol: userSaved.rol,
+			avatar: userSaved.avatar,
 		};
+
+		/* 		const payload = {
+			firstName: userSaved.firstName,
+			rol: userSaved.rol,
+			id: userSaved._id,
+		}; */
 		const token = jwt.sign(payload, process.env.SECRET_KEY, {
 			expiresIn: '1d',
 		});
@@ -38,8 +48,8 @@ const register = async (req, res) => {
 			message: 'Usuario Registrado!',
 			token,
 			id: userSaved._id,
-			firstname: userSaved.firstName,
-			lastname: userSaved.lastName,
+			firstName: userSaved.firstName,
+			lastName: userSaved.lastName,
 			email: userSaved.email,
 			rol: userSaved.rol,
 			avatar: userSaved.avatar,
@@ -65,16 +75,20 @@ const login = async (req, res) => {
 
 		const payload = {
 			email: userFound.email,
+			rol: userFound.rol,
 			id: userFound._id,
 		};
 		const token = jwt.sign(payload, process.env.SECRET_KEY, {
 			expiresIn: '1d',
 		});
+		req.user = userFound;
+
 		res.json({
 			message: 'Usuario Logeado!',
 			token,
 			id: userFound._id,
-			username: userFound.username,
+			firstName: userFound.firstName,
+			lastName: userFound.lastName,
 			email: userFound.email,
 			rol: userFound.rol,
 			avatar: userFound.avatar,
