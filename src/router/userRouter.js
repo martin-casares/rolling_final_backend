@@ -16,13 +16,14 @@ const { Router } = require('express');
 
 const router = Router();
 
-router.get('/users', validarJWT, checkAdminPermission, getUsers);
+router.get('/users', getUsers);
+/* router.get('/users', validarJWT, checkAdminPermission, getUsers); */
 
 router.post(
 	'/user-add',
 	validarJWT,
 	checkAdminPermission,
-	validateRegister,
+
 	createUser
 );
 

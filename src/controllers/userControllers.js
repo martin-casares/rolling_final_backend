@@ -13,6 +13,11 @@ const createUser = async (req, res) => {
 	try {
 		const { firstName, lastName, email, password, rol } = req.body;
 
+		const userFound = await User.findOne({ email });
+		if (userFound) {
+			return res.status(400).json({ message: 'El email ya está en uso' });
+		}
+
 		const newUser = new User({
 			firstName,
 			lastName,
@@ -45,8 +50,11 @@ const updateUser = async (req, res) => {
 		});
 		if (!user)
 			return res.status(400).json({ message: 'No existe un usuario con ese ID' });
+
 		res.status(200).json({ message: 'Usuario actualizado correctamente.', user });
-	} catch (error) {}
+	} catch (error) {
+		res.status(500).json({ message: error.message });
+	}
 };
 
 const deleteUser = async (req, res) => {
